@@ -12,11 +12,14 @@ def resize_img(img, resize=(512,512)):
 def marca_d_agua(img, img_a):
     return cv2.addWeighted(img, 0.7, img_a, 0.3, 0.0)
 
+def escrever_texto(img, text="TEXTO"):
+    return cv2.putText(img, text, (216//2,216), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 2)
+
 def save_image(img, filename):
     return cv2.imwrite(filename, img)
 
 def run(path_dir, filename_d_agua):
-    # Criar um novo diretprio com as imagens com marca d'água
+    # Criar um novo diretório com as imagens com marca d'água
     path_dir_dagua = f'{path_dir}_dagua'
     try:
         os.mkdir(path_dir_dagua)
@@ -24,7 +27,7 @@ def run(path_dir, filename_d_agua):
         shutil.rmtree(path_dir_dagua)
         os.mkdir(path_dir_dagua)
 
-    # Ler todas as imagens do diretorio
+    # Ler todas as imagens do diretório
     img_list = os.listdir(path_dir)
 
     # Ler imagem que será a marca d'água
@@ -36,6 +39,7 @@ def run(path_dir, filename_d_agua):
         img = read_img(path_img)
         img = resize_img(img, resize=(512,512))
         img_dagua = marca_d_agua(img, img_a)
+        escrever_texto(img_dagua, text="SEU TEXTO AQUI!!")
         save_image(img_dagua, '/'.join([path_dir_dagua, img_name]))
 
 
